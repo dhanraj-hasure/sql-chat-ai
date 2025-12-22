@@ -10,6 +10,7 @@ import sqlparse
 import re
 from typing import List, Dict, Any
 import datetime
+from urllib.parse import quote_plus
 
 app = FastAPI(title="SQL Chat By Dhanraj D. Hasure")
 
@@ -38,14 +39,18 @@ class QueryRequest(Config):
     query: str
     schema: str = ""
 
-# Function to get database URL
+
 def get_db_url(config: Config) -> str:
+    user = quote_plus(config.dbUser)
+    password = quote_plus(config.dbPassword)
+
     if config.dbType == "postgresql":
-        return f"postgresql://{config.dbUser}:{config.dbPassword}@{config.dbHost}:{config.dbPort}/{config.dbName}"
-    elif config.dbType == "mysql":
-        return f"mysql+pymysql://{config.dbUser}:{config.dbPassword}@{config.dbHost}:{config.dbPort}/{config.dbName}"
-    else:
-        raise ValueError(f"Unsupported database type: {config.dbType}")
+        return f"postgresql+psycopg2://{user}:{password}@{config.dbHost}:{config.dbPort}/{config.dbName}"
+
+    if config.dbType == "mysql":
+        return f"mysql+pymysql://{user}:{password}@{config.dbHost}:{config.dbPort}/{config.dbName}?charset=utf8mb4"
+
+    raise ValueError(f"Unsupported database type: {config.dbType}")
 
 # Getting schema query for the database type
 def get_schema_query(config: Config) -> str:
