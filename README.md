@@ -2,6 +2,10 @@
 
 A simple, stateless web application that lets you query databases using natural language or direct SQL. No signup, no login - just add your API key and database credentials to get started.
 
+## Live Demo
+
+🔗 [Check here](https://sql-chat-ai.onrender.com/)
+
 ## Features
 
 - 🔓 **Completely Stateless** - No signup or login required
