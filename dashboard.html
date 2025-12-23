@@ -661,6 +661,26 @@
                 font-size: 18px;
             }
         }
+
+        @media (max-width: 640px) {
+            .header-actions button {
+                padding: 8px;
+                min-width: 40px;
+            }
+
+            .header-actions button span.material-icons {
+                margin-right: 0;
+            }
+
+            .header-actions button {
+                font-size: 0;
+            }
+
+            .header-actions button span.material-icons {
+                font-size: 24px;
+            }
+        }
+
     </style>
 </head>
 
@@ -675,15 +695,19 @@
                 <span>SQL Chat</span>
             </div>
             <div class="header-actions">
-                <button class="schema-btn" onclick="openSchemaOverlay()">
+                <button class="schema-btn" onclick="openSchemaOverlay()" title="View Database Schema">
                     <span class="material-icons">table_view</span>
                     View Schema
                 </button>
-                <button class="clear-btn" onclick="clearChatHistory()">
+                <button class="clear-btn" onclick="clearChatHistory()" title="Clear Chat History">
                     <span class="material-icons">delete_outline</span>
                     Clear Chat
                 </button>
-                <button class="settings-btn" onclick="openSettings()">
+                <button class="clear-btn" onclick="clearCredentials()" title="Clear Credentials">
+                    <span class="material-icons">vpn_key</span>
+                    Credentials
+                </button>
+                <button class="settings-btn" onclick="openSettings()" title="Settings">
                     <span class="material-icons">settings</span>
                     Settings
                 </button>
@@ -875,6 +899,21 @@
                 localStorage.removeItem('sqlChatHistory');
                 document.getElementById('messages').innerHTML = '';
                 document.getElementById('welcome').style.display = 'block';
+            }
+        }
+
+        function clearCredentials() {
+            if (confirm('Clear all credentials?')) {
+                config.aiProvider = 'gemini';
+                config.apiKey = '';
+                config.dbType = 'postgresql';
+                config.dbHost = 'localhost';
+                config.dbPort = '5432';
+                config.dbName = '';
+                config.dbUser = '';
+                config.dbPassword = '';
+                localStorage.removeItem('sqlChatConfig');
+                updateFormFields();
             }
         }
 
